@@ -1,105 +1,71 @@
-import tkinter as tk
-from tkinter import ttk
+from flask import Flask, render_template_string
 
-# Main App
-class DevOpsUI:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("DevOps Engineer Dashboard")
-        self.root.geometry("900x600")
-        self.root.configure(bg="#0f172a")
+app = Flask(__name__)
 
-        self.style = ttk.Style()
-        self.style.theme_use('default')
+# Single-file HTML UI
+HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
 
-        # Styling
-        self.style.configure("TButton",
-                             font=("Segoe UI", 10, "bold"),
-                             padding=10,
-                             foreground="#ffffff",
-                             background="#1e293b")
+<div class="flex">
+    <!-- Sidebar -->
+    <div class="w-64 h-screen bg-gray-800 p-5">
+        <h2 class="text-2xl font-bold mb-6 text-blue-400">⚙️ DevOps</h2>
+        <ul>
+            <li class="mb-4 hover:text-blue-400 cursor-pointer">CI/CD</li>
+            <li class="mb-4 hover:text-blue-400 cursor-pointer">Docker</li>
+            <li class="mb-4 hover:text-blue-400 cursor-pointer">Kubernetes</li>
+            <li class="mb-4 hover:text-blue-400 cursor-pointer">Monitoring</li>
+            <li class="mb-4 hover:text-blue-400 cursor-pointer">Logs</li>
+        </ul>
+    </div>
 
-        self.style.map("TButton",
-                       background=[('active', '#334155')])
+    <!-- Main Content -->
+    <div class="flex-1 p-10">
+        <h1 class="text-3xl font-bold text-blue-400 mb-6">🚀 DevOps Dashboard</h1>
 
-        # Header
-        header = tk.Label(root,
-                          text="⚙️ DevOps Engineer Dashboard",
-                          font=("Segoe UI", 20, "bold"),
-                          bg="#0f172a",
-                          fg="#38bdf8")
-        header.pack(pady=15)
+        <!-- Cards -->
+        <div class="grid grid-cols-4 gap-6">
+            <div class="bg-gray-800 p-5 rounded-xl shadow">
+                <p class="text-gray-400">Containers</p>
+                <h2 class="text-2xl">12</h2>
+            </div>
+            <div class="bg-gray-800 p-5 rounded-xl shadow">
+                <p class="text-gray-400">Deployments</p>
+                <h2 class="text-2xl">5</h2>
+            </div>
+            <div class="bg-gray-800 p-5 rounded-xl shadow">
+                <p class="text-gray-400">CPU Usage</p>
+                <h2 class="text-2xl">68%</h2>
+            </div>
+            <div class="bg-gray-800 p-5 rounded-xl shadow">
+                <p class="text-gray-400">Errors</p>
+                <h2 class="text-2xl text-red-400">2</h2>
+            </div>
+        </div>
 
-        # Main Frame
-        main_frame = tk.Frame(root, bg="#0f172a")
-        main_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        <!-- Section -->
+        <div class="mt-10 bg-gray-800 p-6 rounded-xl">
+            <h2 class="text-xl mb-4">System Status</h2>
+            <p class="text-green-400">✔ All systems operational</p>
+        </div>
+    </div>
+</div>
 
-        # Left Panel
-        left_panel = tk.Frame(main_frame, bg="#1e293b", width=250)
-        left_panel.pack(side="left", fill="y", padx=10)
+</body>
+</html>
+"""
 
-        # Buttons
-        buttons = [
-            "CI/CD Pipeline",
-            "Docker Containers",
-            "Kubernetes",
-            "Monitoring",
-            "Logs",
-            "Settings"
-        ]
+@app.route('/')
+def home():
+    return render_template_string(HTML)
 
-        for btn in buttons:
-            ttk.Button(left_panel, text=btn, command=lambda b=btn: self.update_content(b)).pack(pady=10, padx=10, fill="x")
-
-        # Right Panel
-        self.right_panel = tk.Frame(main_frame, bg="#020617")
-        self.right_panel.pack(side="right", fill="both", expand=True, padx=10)
-
-        self.content_label = tk.Label(self.right_panel,
-                                     text="Welcome DevOps Engineer 🚀",
-                                     font=("Segoe UI", 16),
-                                     bg="#020617",
-                                     fg="#e2e8f0")
-        self.content_label.pack(pady=20)
-
-        # Status Cards
-        self.create_status_cards()
-
-    def update_content(self, section):
-        self.content_label.config(text=f"📌 {section} Section Loaded")
-
-    def create_status_cards(self):
-        card_frame = tk.Frame(self.right_panel, bg="#020617")
-        card_frame.pack(pady=20)
-
-        cards = [
-            ("Active Containers", "12"),
-            ("Deployments", "5"),
-            ("CPU Usage", "68%"),
-            ("Errors", "2")
-        ]
-
-        for i, (title, value) in enumerate(cards):
-            card = tk.Frame(card_frame,
-                            bg="#1e293b",
-                            width=150,
-                            height=100)
-            card.grid(row=0, column=i, padx=10)
-
-            tk.Label(card,
-                     text=title,
-                     font=("Segoe UI", 10),
-                     bg="#1e293b",
-                     fg="#94a3b8").pack(pady=5)
-
-            tk.Label(card,
-                     text=value,
-                     font=("Segoe UI", 18, "bold"),
-                     bg="#1e293b",
-                     fg="#38bdf8").pack()
-
-# Run App
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = DevOpsUI(root)
-    root.mainloop()
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
