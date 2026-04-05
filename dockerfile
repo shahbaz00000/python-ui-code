@@ -3,9 +3,10 @@ FROM python:3.9-slim
 WORKDIR /app
 
 COPY main.py .
+COPY requirements.txt .
 
-RUN pip install -r main.py
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-CMD ["python","main.py"]
+CMD ["python", "main.py"]
