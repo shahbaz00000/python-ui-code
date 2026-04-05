@@ -6,6 +6,6 @@ COPY main.py .
 
 RUN pip install -r main.py
 
-EXPOSE 80
+EXPOSE 5000
 
 CMD ["python","main.py"]
