@@ -20,7 +20,7 @@ ENV PYTHONPATH="/app/deps"
 
 EXPOSE 5000
 
-CMD["main.py"]  
+CMD ["python", "main.py"] 
   
   
 
