@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 
 
-RUN pip install - requirements.txt --target=/app/deps
+RUN pip install -r requirements.txt --target=/app/deps
 
 #STATGE 2
 FROM gcr.io/distroless/python3-debian12
